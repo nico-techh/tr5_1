@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import '../data/air_repository.dart';
 import '../viewmodels/air_vm.dart';
 
+import '../widgets/air_bar_chart.dart';
+import 'detail_page.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -25,27 +28,20 @@ class HomePage extends StatelessWidget {
       body: Builder(
         builder: (context) {
           if (airVm.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (airVm.errorMessage != null) {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text(
-                  airVm.errorMessage!,
-                  textAlign: TextAlign.center,
-                ),
+                child: Text(airVm.errorMessage!, textAlign: TextAlign.center),
               ),
             );
           }
 
           if (airVm.citiesData.isEmpty || airVm.selectedCityData == null) {
-            return const Center(
-              child: Text('No hay datos disponibles.'),
-            );
+            return const Center(child: Text('No hay datos disponibles.'));
           }
 
           final favorite = airVm.selectedCityData!;
@@ -57,12 +53,11 @@ class HomePage extends StatelessWidget {
               children: [
                 _FavoriteCityCard(cityData: favorite),
                 const SizedBox(height: 20),
+                AirBarChart(citiesData: airVm.citiesData),
+                const SizedBox(height: 20),
                 const Text(
                   'Ciudades consultadas',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 ...airVm.citiesData.map(
@@ -80,9 +75,7 @@ class HomePage extends StatelessWidget {
 class _FavoriteCityCard extends StatelessWidget {
   final CityAirData cityData;
 
-  const _FavoriteCityCard({
-    required this.cityData,
-  });
+  const _FavoriteCityCard({required this.cityData});
 
   @override
   Widget build(BuildContext context) {
@@ -113,9 +106,7 @@ class _FavoriteCityCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               airVm.getSportVerdict(reading.europeanAqi),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -127,9 +118,7 @@ class _FavoriteCityCard extends StatelessWidget {
 class _CityListTile extends StatelessWidget {
   final CityAirData cityData;
 
-  const _CityListTile({
-    required this.cityData,
-  });
+  const _CityListTile({required this.cityData});
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +134,11 @@ class _CityListTile extends StatelessWidget {
         trailing: const Icon(Icons.chevron_right),
         onTap: () {
           airVm.selectCity(cityData);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const DetailPage()),
+          );
         },
         onLongPress: () {
           airVm.setFavoriteCity(cityData);
