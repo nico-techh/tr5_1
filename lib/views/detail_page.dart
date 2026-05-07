@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../viewmodels/air_vm.dart';
+import '../widgets/air_pie_chart.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key});
