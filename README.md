@@ -116,15 +116,15 @@ Las dependencias principales del proyecto son:
 
 ### Pantalla principal
 
-Pendiente de añadir captura.
+C:\Users\Nico\tr5_1\docs\capturas\home.png
 
 ### Pantalla de detalle
 
-Pendiente de añadir captura.
+C:\Users\Nico\tr5_1\docs\capturas\detalle.png
 
 ### PDF generado
 
-Pendiente de añadir captura.
+C:\Users\Nico\tr5_1\docs\capturas\pdf.png
 
 ## PDF de ejemplo
 
