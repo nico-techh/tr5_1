@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../viewmodels/air_vm.dart';
+
 import '../widgets/air_pie_chart.dart';
+
+import 'package:printing/printing.dart';
+
+import '../services/pdf_service.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key});
@@ -14,12 +19,8 @@ class DetailPage extends StatelessWidget {
 
     if (cityData == null) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Detalle'),
-        ),
-        body: const Center(
-          child: Text('No hay ciudad seleccionada.'),
-        ),
+        appBar: AppBar(title: const Text('Detalle')),
+        body: const Center(child: Text('No hay ciudad seleccionada.')),
       );
     }
 
@@ -38,9 +39,7 @@ class DetailPage extends StatelessWidget {
               airVm.setFavoriteCity(cityData);
 
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('${city.name} marcada como favorita'),
-                ),
+                SnackBar(content: Text('${city.name} marcada como favorita')),
               );
             },
             icon: const Icon(Icons.star_border),
@@ -58,15 +57,28 @@ class DetailPage extends StatelessWidget {
             updatedAt: reading.time,
           ),
           const SizedBox(height: 16),
-          _SportCard(
-            verdict: verdict,
-            explanation: explanation,
-          ),
+          _SportCard(verdict: verdict, explanation: explanation),
+          const SizedBox(height: 16),
+          AirPieChart(cityData: cityData),
           const SizedBox(height: 16),
           _ValuesCard(reading: reading),
           const SizedBox(height: 16),
           FilledButton.icon(
-            onPressed: () {},
+            onPressed: () async {
+              final pdfService = PdfService();
+
+              await Printing.layoutPdf(
+                name:
+                    'informe_${city.name.toLowerCase().replaceAll(' ', '_')}.pdf',
+                onLayout: (_) {
+                  return pdfService.generateCityReport(
+                    cityData: cityData,
+                    verdict: verdict,
+                    explanation: explanation,
+                  );
+                },
+              );
+            },
             icon: const Icon(Icons.picture_as_pdf),
             label: const Text('Generar informe PDF'),
           ),
@@ -108,10 +120,7 @@ class _CityHeaderCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             country,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Color(0xFF49645E),
-            ),
+            style: const TextStyle(fontSize: 16, color: Color(0xFF49645E)),
           ),
           const SizedBox(height: 14),
           Text(
@@ -128,10 +137,7 @@ class _SportCard extends StatelessWidget {
   final String verdict;
   final String explanation;
 
-  const _SportCard({
-    required this.verdict,
-    required this.explanation,
-  });
+  const _SportCard({required this.verdict, required this.explanation});
 
   @override
   Widget build(BuildContext context) {
@@ -157,12 +163,7 @@ class _SportCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            explanation,
-            style: const TextStyle(
-              color: Color(0xFF49645E),
-            ),
-          ),
+          Text(explanation, style: const TextStyle(color: Color(0xFF49645E))),
         ],
       ),
     );
@@ -172,9 +173,7 @@ class _SportCard extends StatelessWidget {
 class _ValuesCard extends StatelessWidget {
   final dynamic reading;
 
-  const _ValuesCard({
-    required this.reading,
-  });
+  const _ValuesCard({required this.reading});
 
   @override
   Widget build(BuildContext context) {
@@ -252,9 +251,7 @@ class _ValueRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
-                color: Color(0xFF49645E),
-              ),
+              style: const TextStyle(color: Color(0xFF49645E)),
             ),
           ),
           Text(
@@ -273,9 +270,7 @@ class _ValueRow extends StatelessWidget {
 class _AirCard extends StatelessWidget {
   final Widget child;
 
-  const _AirCard({
-    required this.child,
-  });
+  const _AirCard({required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -284,9 +279,7 @@ class _AirCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFF4FAF8),
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: const Color(0xFFD5E8E2),
-        ),
+        border: Border.all(color: const Color(0xFFD5E8E2)),
       ),
       child: child,
     );
