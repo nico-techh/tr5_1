@@ -13,10 +13,18 @@ class City {
 
   factory City.fromJson(Map<String, dynamic> json) {
     return City(
-      name: json['name']?.toString() ?? 'Ciudad desconocida',
+      name: _normalizeCityName(json['name']?.toString() ?? 'Ciudad desconocida'),
       country: json['country']?.toString() ?? 'País desconocido',
       latitude: (json['latitude'] as num?)?.toDouble() ?? 0,
       longitude: (json['longitude'] as num?)?.toDouble() ?? 0,
     );
+  }
+
+  static String _normalizeCityName(String name) {
+    if (name == 'La Coruña') {
+      return 'A Coruña';
+    }
+
+    return name;
   }
 }
