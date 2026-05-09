@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 
 import '../data/air_repository.dart';
 
+
+/// Gráfica de barras que compara el AQI europeo entre ciudades.
+///
+/// Utiliza datos reales agrupados en [CityAirData]. La gráfica ayuda a decidir
+/// qué ciudad tiene mejor calidad del aire, ya que un AQI menor indica mejores
+/// condiciones.
 class AirBarChart extends StatelessWidget {
+
+    /// Lista de ciudades con sus lecturas actuales.
   final List<CityAirData> citiesData;
 
   const AirBarChart({

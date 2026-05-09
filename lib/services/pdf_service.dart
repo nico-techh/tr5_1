@@ -4,8 +4,17 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../data/air_repository.dart';
-
+/// Servicio encargado de generar informes PDF.
+///
+/// Usa el paquete `pdf` para construir un documento con widgets propios del
+/// paquete. Recibe un [CityAirData] y lo transforma en un informe imprimible
+/// con valores actuales, fechas y recomendación deportiva.
 class PdfService {
+
+  /// Genera un informe PDF para una ciudad concreta.
+  ///
+  /// Incluye cabecera, coordenadas, tabla con parámetros de calidad del aire,
+  /// veredicto deportivo, fecha de generación y fuente de datos.
   Future<Uint8List> generateCityReport({
     required CityAirData cityData,
     required String verdict,

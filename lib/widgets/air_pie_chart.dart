@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 
 import '../data/air_repository.dart';
 
+
+/// Gráfica circular de composición de contaminantes.
+///
+/// Muestra el peso relativo de PM10, PM2.5, NO2 y ozono para la ciudad
+/// seleccionada. Recibe un [CityAirData] con la lectura actual.
 class AirPieChart extends StatelessWidget {
+
+    /// Datos de la ciudad seleccionada.
   final CityAirData cityData;
 
   const AirPieChart({
