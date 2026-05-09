@@ -2,6 +2,11 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+/// Capa de acceso a datos remotos.
+///
+/// Esta clase realiza las peticiones HTTP a los endpoints de Open-Meteo.
+/// No transforma los datos en modelos de la app; solo devuelve mapas JSON
+/// que después serán tratados por [AirRepository].
 class AirApi {
   static const String _geocodingBaseUrl =
       'https://geocoding-api.open-meteo.com/v1/search';
@@ -9,6 +14,10 @@ class AirApi {
   static const String _airQualityBaseUrl =
       'https://air-quality-api.open-meteo.com/v1/air-quality';
 
+  /// Busca una ciudad por nombre usando la Geocoding API de Open-Meteo.
+  ///
+  /// Devuelve el primer resultado encontrado como mapa JSON.
+  /// Lanza una excepción si la petición falla o si no se encuentra la ciudad.
   Future<Map<String, dynamic>> searchCity(String cityName) async {
     final uri = Uri.parse(_geocodingBaseUrl).replace(
       queryParameters: {
@@ -36,7 +45,10 @@ class AirApi {
 
     return results.first as Map<String, dynamic>;
   }
-
+ /// Obtiene la calidad del aire actual a partir de coordenadas.
+  ///
+  /// Consulta AQI europeo y varios contaminantes necesarios para la interfaz,
+  /// las gráficas y el informe PDF.
   Future<Map<String, dynamic>> getAirQuality({
     required double latitude,
     required double longitude,
