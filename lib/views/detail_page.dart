@@ -63,25 +63,35 @@ class DetailPage extends StatelessWidget {
           const SizedBox(height: 16),
           _ValuesCard(reading: reading),
           const SizedBox(height: 16),
-          FilledButton.icon(
-            onPressed: () async {
-              final pdfService = PdfService();
+          Tooltip(
+  message: 'Generar informe PDF de la ciudad',
+  child: FilledButton.icon(
+    onPressed: () async {
+      final pdfService = PdfService();
 
-              await Printing.layoutPdf(
-                name:
-                    'informe_${city.name.toLowerCase().replaceAll(' ', '_')}.pdf',
-                onLayout: (_) {
-                  return pdfService.generateCityReport(
-                    cityData: cityData,
-                    verdict: verdict,
-                    explanation: explanation,
-                  );
-                },
-              );
-            },
-            icon: const Icon(Icons.picture_as_pdf),
-            label: const Text('Generar informe PDF'),
+      await Printing.layoutPdf(
+        name: 'informe_${city.name.toLowerCase().replaceAll(' ', '_')}.pdf',
+        onLayout: (_) {
+          return pdfService.generateCityReport(
+            cityData: cityData,
+            verdict: verdict,
+            explanation: explanation,
+          );
+        },
+      );
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Informe PDF generado correctamente'),
           ),
+        );
+      }
+    },
+    icon: const Icon(Icons.picture_as_pdf),
+    label: const Text('Generar informe PDF'),
+  ),
+),
         ],
       ),
     );
