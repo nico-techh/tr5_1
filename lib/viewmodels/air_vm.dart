@@ -11,22 +11,27 @@ import '../data/air_repository.dart';
 /// Utiliza [AirRepository] para obtener los datos de calidad del aire.
 
 class AirVm extends ChangeNotifier {
-
-    /// Repositorio usado para consultar los datos de Open-Meteo.
+  /// Repositorio usado para consultar los datos de Open-Meteo.
   final AirRepository repository;
 
   AirVm({required this.repository});
+
   /// Indica si la aplicación está cargando datos.
   bool isLoading = false;
-    /// Mensaje de error mostrado en la interfaz cuando falla la carga.
+
+  /// Mensaje de error mostrado en la interfaz cuando falla la carga.
   String? errorMessage;
-   /// Lista de ciudades con sus datos actuales de calidad del aire.
+
+  /// Lista de ciudades con sus datos actuales de calidad del aire.
   List<CityAirData> citiesData = [];
-   /// Ciudad seleccionada actualmente para mostrar su detalle.
+
+  /// Ciudad seleccionada actualmente para mostrar su detalle.
   CityAirData? selectedCityData;
-    /// Nombre de la ciudad marcada como favorita.
+
+  /// Nombre de la ciudad marcada como favorita.
   String favoriteCityName = 'A Coruña';
-/// Carga los datos de las ciudades gallegas desde el repositorio.
+
+  /// Carga los datos de las ciudades gallegas desde el repositorio.
   ///
   /// Actualiza los estados de carga, error y datos. Al finalizar, selecciona
   /// la ciudad favorita o la primera ciudad disponible.
@@ -38,7 +43,8 @@ class AirVm extends ChangeNotifier {
     try {
       citiesData = await repository.getGalicianCitiesAirData();
       selectedCityData = citiesData.firstWhere(
-        (item) => item.city.name.toLowerCase() == favoriteCityName.toLowerCase(),
+        (item) =>
+            item.city.name.toLowerCase() == favoriteCityName.toLowerCase(),
         orElse: () => citiesData.first,
       );
     } catch (e) {
@@ -48,17 +54,20 @@ class AirVm extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
- /// Selecciona una ciudad para mostrarla en la pantalla de detalle.
+
+  /// Selecciona una ciudad para mostrarla en la pantalla de detalle.
   void selectCity(CityAirData cityData) {
     selectedCityData = cityData;
     notifyListeners();
   }
- /// Cambia la ciudad favorita y la selecciona como ciudad actual.
+
+  /// Cambia la ciudad favorita y la selecciona como ciudad actual.
   void setFavoriteCity(CityAirData cityData) {
     favoriteCityName = cityData.city.name;
     selectedCityData = cityData;
     notifyListeners();
   }
+
   /// Devuelve el veredicto deportivo en función del AQI europeo.
   ///
   /// La lógica se basa en tres tramos: bueno, moderado y desfavorable.
@@ -73,6 +82,7 @@ class AirVm extends ChangeNotifier {
 
     return 'Mejor hoy no';
   }
+
   /// Devuelve una explicación textual del veredicto deportivo.
   String getSportExplanation(double europeanAqi) {
     if (europeanAqi <= 40) {
