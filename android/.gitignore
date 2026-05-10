@@ -12,3 +12,11 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+# TR7 - firma Android
+android/key.properties
+android/app/aircheck_release.jks
+*.jks
+*.keystore
+
+# Builds generados
+build/
